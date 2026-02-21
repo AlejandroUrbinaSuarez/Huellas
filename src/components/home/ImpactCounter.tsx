@@ -1,11 +1,12 @@
 import { HeartHandshake } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
 
-export default function ImpactCounter() {
-    // En el futuro, estos datos vendrán de la base de datos (Prisma)
-    const mockImpactData = {
-        shoesDonated: 1240,
-        peopleHelped: 1240,
-        activeCampaigns: 3
+export default async function ImpactCounter() {
+    // Fetch directly from database (Next.js Server Component)
+    const impact = await prisma.donationImpact.findFirst() || {
+        totalPairsDonated: 0,
+        totalPeopleHelped: 0,
+        activeCampaigns: 0
     };
 
     return (
@@ -25,17 +26,17 @@ export default function ImpactCounter() {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-brand-100 flex flex-col items-center justify-center text-center transform transition-transform hover:-translate-y-1">
-                                <span className="text-5xl font-extrabold text-accent mb-2">{mockImpactData.shoesDonated}</span>
+                                <span className="text-5xl font-extrabold text-accent mb-2">{impact.totalPairsDonated}</span>
                                 <span className="text-brand-700 font-medium">Pares Donados</span>
                             </div>
 
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-brand-100 flex flex-col items-center justify-center text-center transform transition-transform hover:-translate-y-1">
-                                <span className="text-5xl font-extrabold text-brand-500 mb-2">{mockImpactData.peopleHelped}</span>
+                                <span className="text-5xl font-extrabold text-brand-500 mb-2">{impact.totalPeopleHelped}</span>
                                 <span className="text-brand-700 font-medium">Personas Ayudadas</span>
                             </div>
 
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-brand-100 flex flex-col items-center justify-center text-center transform transition-transform hover:-translate-y-1">
-                                <span className="text-5xl font-extrabold text-brand-800 mb-2">{mockImpactData.activeCampaigns}</span>
+                                <span className="text-5xl font-extrabold text-brand-800 mb-2">{impact.activeCampaigns}</span>
                                 <span className="text-brand-700 font-medium">Campañas Activas</span>
                             </div>
                         </div>
