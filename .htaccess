@@ -1,0 +1,7 @@
+# DO NOT REMOVE. CHANGING THIS CAN IMPACT APPLICATION PERFORMANCE.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Redirect requests for static next assets directly to the physical files
+  RewriteCond %{REQUEST_URI} ^/_next/static/(.*)$
+  RewriteRule ^_next/static/(.*)$ .next/static/$1 [L]
+</IfModule>

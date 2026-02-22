@@ -1,13 +1,10 @@
-const next = require('next');
-const http = require('http');
+// Hostinger Passenger custom entry point for Next.js Standalone
+const path = require('path');
 
-const app = next({ dev: process.env.NODE_ENV !== 'production' });
-const handle = app.getRequestHandler();
+// When output: 'standalone' is enabled, Next.js generates its own optimized server
+// inside the standalone directory. We just need to load it.
+process.env.NODE_ENV = 'production';
+process.chdir(__dirname);
 
-app.prepare().then(() => {
-    http.createServer((req, res) => {
-        handle(req, res);
-    }).listen(process.env.PORT || 3000, () => {
-        console.log(`Server is running on port ${process.env.PORT || 3000}`);
-    });
-});
+// Use the bundled Next.js server directly
+require(path.join(__dirname, '.next', 'standalone', 'server.js'));
