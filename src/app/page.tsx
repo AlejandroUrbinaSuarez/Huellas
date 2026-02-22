@@ -7,10 +7,27 @@ import AddToCartButton from "@/components/home/AddToCartButton";
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const products = await prisma.product.findMany({
-    take: 4,
-    orderBy: { createdAt: "desc" },
-  });
+  let products: any[] = [];
+  let dbError = null;
+
+  try {
+    products = await prisma.product.findMany({
+      take: 4,
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err: any) {
+    console.error("Prisma error:", err);
+    dbError = err.message || JSON.stringify(err);
+  }
+
+  if (dbError) {
+    return (
+      <div className="p-8 text-center text-red-500 font-bold max-w-2xl mx-auto mt-20 bg-red-50 rounded-xl">
+        <h2>Falló la conexión a la Base de Datos en Producción:</h2><br />
+        <code className="text-xs text-left block bg-white border border-red-200 p-4 rounded text-red-800 break-words">{String(dbError)}</code>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">

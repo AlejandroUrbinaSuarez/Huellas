@@ -2,12 +2,18 @@ import { HeartHandshake } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
 export default async function ImpactCounter() {
-    // Fetch directly from database (Next.js Server Component)
-    const impact = await prisma.donationImpact.findFirst() || {
+    let impact: any = {
         totalPairsDonated: 0,
         totalPeopleHelped: 0,
         activeCampaigns: 0
     };
+
+    try {
+        const fetched = await prisma.donationImpact.findFirst();
+        if (fetched) impact = fetched;
+    } catch (err: any) {
+        console.error("ImpactCounter Prisma error:", err.message);
+    }
 
     return (
         <section className="py-20 bg-white">
